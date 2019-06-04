@@ -3,7 +3,9 @@
 ```
 # Build the docker
 $ docker build -t linux-dev .
-# Install the invoke function
+# Source the invoke function (for now)
+$ source invoke.sh
+# Install the invoke function (for later)
 $ cat invoke.sh >> ~/.bashrc
 # Browse to the appropriate folder
 $ cd path/to/working/directory
