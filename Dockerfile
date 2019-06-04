@@ -15,10 +15,15 @@ ENV LANGUAGE en_US.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install some essentials
-RUN apt-get install -y vim \
+RUN apt-get install -y \
+            ubuntu-server \
+            vim \
             python \
             python-dev \
             python-pip \
+            python-virtualenv \
+            python3 \
+            python3-pip \
             ruby \
             ruby-dev \
             gem \
@@ -38,6 +43,13 @@ RUN useradd -rm -d /home/user -s /bin/bash -g user -G sudo -u 1000 user
 RUN sed -i.bkp -e \
       's/%sudo\s\+ALL=(ALL\(:ALL\)\?)\s\+ALL/%sudo ALL=NOPASSWD:ALL/g' \
       /etc/sudoers
+
+# Some ruby deps
+RUN gem install bundler
+
+# python deps
+RUN su - user -c "pip install --user virtualenv requests flask"
+RUN su - user -c "pip3 install --user black"
 
 USER user
 WORKDIR /home/user/work
