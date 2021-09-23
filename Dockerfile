@@ -18,10 +18,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y \
             ubuntu-server \
             vim \
-            python \
-            python-dev \
-            python-pip \
-            python-virtualenv \
             python3 \
             python3-pip \
             ruby \
@@ -33,7 +29,7 @@ RUN apt-get install -y \
             sudo
 
 # Cheat by installing the python and ruby build dependencies
-RUN apt-get build-dep -y python ruby
+RUN apt-get build-dep -y python3 ruby
 
 # create 'user' user
 RUN groupadd -g 1000 user
@@ -48,7 +44,6 @@ RUN sed -i.bkp -e \
 RUN gem install bundler
 
 # python deps
-RUN su - user -c "pip install --user virtualenv requests flask"
 RUN su - user -c "pip3 install --user black"
 
 USER user
