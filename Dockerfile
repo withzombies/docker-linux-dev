@@ -26,14 +26,18 @@ RUN apt-get install -y \
             git \
             cmake \
             build-essential \
-            sudo
+            sudo \
+            gradle \
+            rustup
 
 # Cheat by installing the python and ruby build dependencies
-RUN apt-get build-dep -y python3 ruby
+RUN sed -i -r 's/#deb-src/deb-src/g' /etc/apt/sources.list
+RUN apt-get update
+#RUN apt-get build-dep -y python3 ruby
 
 # create 'user' user
-RUN groupadd -g 1000 user
-RUN useradd -rm -d /home/user -s /bin/bash -g user -G sudo -u 1000 user
+RUN groupadd -g 1001 user
+RUN useradd -rm -d /home/user -s /bin/bash -g user -G sudo -u 1001 user
 
 # Enable passwordless sudo for users under the "sudo" group
 RUN sed -i.bkp -e \
@@ -43,12 +47,14 @@ RUN sed -i.bkp -e \
 # Some ruby deps
 RUN gem install bundler
 
-# python deps
-RUN su - user -c "pip3 install --user black"
-
 USER user
-WORKDIR /home/user/work
+WORKDIR /home/user
+
+# rust
+RUN rustup default stable
 
 # copy in the rc files
 COPY --chown=user:user rc/ /home/user/
+
+WORKDIR /home/user/work
 
